@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import { CircleIcon } from 'lucide-react'
 import { CalendarInterface } from "@/components/calendar-interface"
 import { CommunityForm } from "@/components/community-form"
