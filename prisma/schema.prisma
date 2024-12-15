@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  username      String?   @unique
+  image         String?
+  age           Int?
+  gender        Gender? 
+  location      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+ events    Event[]      // Events created by this user
+  attendance Attendance[] // Events this user is attending
+  accounts  Account[]
+  sessions  Session[]
+  consents    Consent[]
+}
+model Consent {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  agreedToTerms  Boolean
+  agreedToPrivacyPolicy Boolean
+  createdAt      DateTime  @default(now())
+
+  @@index([userId])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model Event {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  userId      String 
+  user        User         @relation(fields: [userId], references: [id])
+  details     EventDetail? // Optional detailed description
+  attendance  Attendance[] // Users attending this event
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  @@index([userId])
+}
+
+model EventDetail {
+  id           Int      @id @default(autoincrement())
+  eventId      Int      @unique
+  additionalInfo String
+  images       String   @db.Text
+  documents    String   @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  event        Event    @relation(fields: [eventId], references: [id])
+
+  @@index([eventId])
+}
+
+model Attendance {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  eventId    Int
+  status     AttendanceStatus @default(PENDING) // Status of attendance
+  attendedAt DateTime? // Timestamp when the user marked as attended
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user       User     @relation(fields: [userId], references: [id])
+  event      Event    @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId]) // A user can only attend an event once
+  @@index([userId])
+  @@index([eventId])
+}
+
+enum AttendanceStatus {
+  PENDING // RSVP not yet confirmed
+  CONFIRMED // RSVP confirmed
+  CANCELED // RSVP canceled
+  ATTENDED // Marked as attended
+}
