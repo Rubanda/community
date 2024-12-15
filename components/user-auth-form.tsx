@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react"
 // import * as z from "zod"
 import { cn } from "../lib/utils"
 // import { userAuthSchema } from "../lib/validations/auth"
-import { buttonVariants } from "../components/ui/button"
+import { Button } from "../components/ui/button"
 import { Icons } from "../components/icons"
 
 export function UserAuthForm({ 
@@ -16,9 +16,10 @@ export function UserAuthForm({
 
   return (
     <div className="grid gap-6" {...props}>
-      <button
+      <Button
         type="button"
-        className={cn(buttonVariants({ variant: "outline" }), className)}
+        variant='outline'
+        className={cn("text-foreground", className)}
         onClick={() => {
           setIsGoogleLoading(true)
           signIn('google', { callbackUrl: '/dash' })
@@ -30,7 +31,7 @@ export function UserAuthForm({
         ) : (
           <Icons.google className="mr-2 h-4 w-4" />
         )}{" "}Google
-      </button>
+      </Button>
     </div>
   )
 }
