@@ -44,5 +44,13 @@ export const eventDummyData = [
          img: 'https://www.eventindustrynews.com/wp-content/uploads/2022/11/BM_ETL22_Awards_0127-scaled.jpg',
       },
 
-      
+      {
+         id:'6',
+          cta: 'Closed',
+          description: 'Elevate & Connect: Monthly Virtual Networking Meet-Up For Our Great And Outstanding Events. Join Us For This Experience',
+          date: ' Tue, Dec 31 . 9:30 PM',
+          venue: 'Near East University',
+          img: 'https://www.eventindustrynews.com/wp-content/uploads/2022/11/BM_ETL22_Awards_0127-scaled.jpg',
+       },
+
 ]
