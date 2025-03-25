@@ -1,6 +1,6 @@
-import { HtruncateText } from "@/utils/helperfunctions";
 import React from "react";
 import { eventDummyData } from "./dummyData";
+import { HtruncateText } from "@/lib/utils";
 
 export default function Page() {
   const text =
