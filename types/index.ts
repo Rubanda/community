@@ -17,3 +17,11 @@ export type SiteConfig = {
       external?: boolean
     }[]
   }
+
+  export interface EventData  {
+        img: string,
+        description: string,
+        date: string, //for testing purpose since i ma working with a dummy data,
+        venue: string,
+        cta?: string,
+  }

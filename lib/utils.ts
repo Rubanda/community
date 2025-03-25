@@ -12,3 +12,12 @@ export function slugify(str: string) {
     .replace(/[^\w-]+/g, "")
     .replace(/--+/g, "-")
 }
+
+export function HtruncateText(text: string, maxLenght: number): string {
+
+  if (text.length > maxLenght) {
+    return text.slice(0, maxLenght) + "...";
+  }
+
+  return text;
+} 
